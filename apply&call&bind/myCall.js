@@ -2,9 +2,10 @@
  * 改变目标函数 this 的指向，接受参数列表，目标函数调用 call 后会立即执行
  * fn.call(thisArg, arg1, arg2, ...)
  *
+ * 一句话概括：自定义的call方法就是让目标函数作为对象（指定的对象或者在方法内创建的对象）的方法被调用
  */
 
-function myCall(context, ...params) {
+function call(context, ...params) {
   if (typeof context === 'object') {
     // 第一个值可能传的是 null，这时候需要将this指向全局对象
     context = context || window;
@@ -13,6 +14,8 @@ function myCall(context, ...params) {
     // 这里有个问题，在严格模式下，如果不传第一个参数，则 this 值将是 undefined，从而报错，这里需要优化下
     context = Object.create(null);
   }
+
+  // Function.prototype.myCall = function(params) {};
 
   // 用Symbol值作为键，避免键重复
   const fn = Symbol();
@@ -28,7 +31,7 @@ function myCall(context, ...params) {
   return result;
 }
 
-Function.prototype.myCall = myCall;
+// Function.prototype.myCall = myCall;
 
 const person = {
   name: '小明',
@@ -39,4 +42,4 @@ function printName(msg) {
   console.log(this.name, msg);
 }
 
-printName.myCall(person, 'abcd');
+// printName.myCall(person, 'abcd');
