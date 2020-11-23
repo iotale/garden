@@ -6,14 +6,10 @@
  */
 
 function call(context, ...params) {
-  if (typeof context === 'object') {
-    // 第一个值可能传的是 null，这时候需要将this指向全局对象
-    context = context || window;
-  } else {
-    // 不传第一个参数时，需要生成一个空对象
-    // 这里有个问题，在严格模式下，如果不传第一个参数，则 this 值将是 undefined，从而报错，这里需要优化下
-    context = Object.create(null);
-  }
+  // 第一个值可能传的是 null，这时候需要将this指向全局对象
+  // 不传第一个参数时，需要生成一个空对象
+  // 这里有个问题，在严格模式下，如果不传第一个参数，则 this 值将是 undefined，从而报错，这里需要优化下
+  context = typeof context === 'object' ? context || window : Object.create(null);
 
   // Function.prototype.myCall = function(params) {};
 
